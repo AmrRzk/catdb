@@ -1,0 +1,11 @@
+{% load static %}
+
+{% if human_list %}
+<ul>
+    {% for human in human_list %}
+    <li><a href="{% url 'web:human' human.id %}">{{ human.name }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No polls are available.</p>
+{% endif %}
