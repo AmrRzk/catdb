@@ -1,0 +1,53 @@
+<style>
+    body {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    button {
+        padding: 10px;
+        background-color: rgb(207, 196, 255);
+        border-radius: 8px;
+        border: 0;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+    }
+</style>
+
+<body>
+    {% if object_list %}
+    <ul>
+
+        {% if human_list %}
+        {% for human in human_list %}
+        <li><a href="{% url 'web:human-detail' human.id %}">{{ human.name }}</a></li>
+        {% endfor %}
+        {% endif %}
+
+
+        {% if cat_list %}
+        {% for cat in cat_list %}
+        <li><a href="{% url 'web:cat-detail' cat.id %}">{{ cat.name }}</a></li>
+        {% endfor %}
+        {% endif %}
+
+        {% if home_list %}
+        {% for home in home_list %}
+        <li><a href="{% url 'web:home-detail' home.id %}">{{ home.name }}</a></li>
+        {% endfor %}
+        {% endif %}
+
+        {% if breed_list %}
+        {% for breed in breed_list %}
+        <li><a href="{% url 'web:breed-detail' breed.id %}">{{ breed.name }}</a></li>
+        {% endfor %}
+        {% endif %}
+
+    </ul>
+    {% else %}
+    <p>No polls are available.</p>
+    {% endif %}
+
+    <div>
+        <button>Create New</button>
+    </div>
+</body>

@@ -29,8 +29,14 @@ class Home(models.Model):
 
 
 class Human(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('N', 'Not Disclosed')
+    ]
     name = models.CharField(max_length=200)
-    gender = models.CharField(max_length=20)
+    gender = models.CharField(
+        max_length=2, choices=GENDER_CHOICES, default='N')
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     home = models.ForeignKey(Home, related_name='human',
