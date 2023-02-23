@@ -15,13 +15,32 @@
         width: 50%;
         flex: auto;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
     }
 
     h1,
     h3 {
         text-align: center;
         line-height: 2rem;
+    }
+
+    .btn-text {
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+
+    }
+
+    .btn {
+        flex-wrap: wrap;
+        background-color: #dddddd;
+        padding: 10px 20px;
+        border-radius: 4px;
+        display: inline-flex;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+
+    .btn:hover {
+        background-color: #aaaaaa;
     }
 </style>
 
@@ -33,17 +52,36 @@
         <h1>{{ human.name }}</h1>
         <h3>{{ human.gender }} | {{ human.birth_date }}</h3>
         <hr />
-        <p>{{ human.description }}</p>
-        <p>{{ human.home }}</p>
+        <p>Address: {{ human.home }}</p>
+        <p>Description: {{ human.description }}</p>
+
+        <div class="links">
+            <a href="{% url 'sitecat:human-edit' human.id %}" class="btn-text">
+                <div class="btn">
+                    Edit
+                </div>
+            </a>
+        </div>
+
     </div>
     {% endif %}
 
     {% if cat %}
     <div class="card">
         <h1>{{ cat.name }}</h1>
-        <h3>{{ cat.gender }} | {{ cat.birth_date }} | {{ cat.breed }}</h3>
-        <p>{{ cat.owner }}</p>
-        <p>{{ cat.description }}</p>
+        <h3>{{ cat.gender }} | {{ cat.birth_date }}</h3>
+        <p>Breed: {{ cat.breed }}</p>
+        <p>Owner: {{ cat.owner }}</p>
+        <p>Description: {{ cat.description }}</p>
+
+        <div class="links">
+            <a href="{% url 'sitecat:cat-edit' cat.id %}" class="btn-text">
+                <div class="btn">
+                    Edit
+                </div>
+            </a>
+        </div>
+
     </div>
     {% endif %}
 
@@ -52,6 +90,15 @@
         <h1>{{ home.name }}</h1>
         <h3>{{ home.house_type }}</h3>
         <h3>{{ home.address }}</h3>
+
+        <div class="links">
+            <a href="{% url 'sitecat:home-edit' home.id %}" class="btn-text">
+                <div class="btn">
+                    Edit
+                </div>
+            </a>
+        </div>
+
     </div>
     {% endif %}
 
@@ -60,8 +107,17 @@
     <div class="card">
         <h1>{{ breed.name }}</h1>
         <h3>{{ breed.origin }}</h3>
-        <p>{{ breed.description }}</p>
+        <p>Description: {{ breed.description }}</p>
+
+        <div class="links">
+            <a href="{% url 'sitecat:breed-edit' breed.id %}" class="btn-text">
+                <div class="btn">
+                    Edit
+                </div>
+            </a>
+        </div>
     </div>
+
 
     {% endif %}
 </body>

@@ -58,7 +58,7 @@ class Cat(models.Model):
     ]
     name = models.CharField(max_length=200)
     gender = models.CharField(
-        max_length=2, choices=GENDER_CHOICES, default='M')
+        max_length=2, choices=GENDER_CHOICES, default='N')
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     breed = models.ForeignKey(
