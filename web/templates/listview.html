@@ -3,13 +3,16 @@
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
-    button {
+    .btn {
         padding: 10px;
         background-color: #dddddd;
         border-radius: 8px;
         border: 0;
         box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        text-decoration: none;
+        color: black;
     }
+
 
     button:hover {
         background-color: #a8a8a8;
@@ -111,9 +114,11 @@
 
         <tbody>
             {% for home in home_list %}
-            <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.name }}</a></td>
-            <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.address }}</a></td>
-            <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.house_type }}</a></td>
+            <tr>
+                <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.address }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.house_type }}</a></td>
+            </tr>
             {% endfor %}
         </tbody>
         {% endif %}
@@ -127,19 +132,37 @@
 
         <tbody>
             {% for breed in breed_list %}
-            <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.name }}</a></td>
-            <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.address }}</a></td>
-            <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.house_type }}</a></td>
+            <tr>
+                <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.origin }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.description }}</a></td>
+            </tr>
             {% endfor %}
         </tbody>
         {% endif %}
 
     </table>
+
     {% else %}
-    <p>No data are available.</p>
+    <p>No data for {{ request.path|slice:"1:" }}s available.</p>
     {% endif %}
 
     <div>
-        <button>Create New</button>
+        {% if request.path == "/human" %}
+        <a class='btn' href="{% url 'web:human-create' %}">Create New</a>
+        {% endif %}
+
+        {% if request.path == "/cat" %}
+        <a class='btn' href="{% url 'web:cat-create' %}">Create New</a>
+        {% endif %}
+
+        {% if request.path == "/home" %}
+        <a class='btn' href="{% url 'web:home-create' %}">Create New</a>
+        {% endif %}
+
+        {% if request.path == "/breed" %}
+        <a class='btn' href="{% url 'web:breed-create' %}">Create New</a>
+        {% endif %}
+
     </div>
 </body>
