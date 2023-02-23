@@ -7,11 +7,10 @@
         margin: 50px auto;
         float: none;
         padding: 20px;
-        background-color: white;
         border-radius: 10px;
         width: 50%;
         flex: auto;
-        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
     }
 
@@ -26,10 +25,11 @@
 
 {% if human %}
 <div class="card">
-    <h1>Name</h1>
-    <h3>Male | 28 February</h3>
-    <p>Description</p>
-    <p>Home Name: Address</p>
+    <h1>{{ human.name }}</h1>
+    <h3>{{ human.gender }} | {{ human.birth_date }}</h3>
+    <hr />
+    <p>{{ human.description }}</p>
+    <p>{{ human.home }}</p>
 </div>
 {% endif %}
 

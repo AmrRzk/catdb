@@ -5,46 +5,138 @@
 
     button {
         padding: 10px;
-        background-color: rgb(207, 196, 255);
+        background-color: #dddddd;
         border-radius: 8px;
         border: 0;
         box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    }
 
+    button:hover {
+        background-color: #a8a8a8;
+        cursor: pointer;
+    }
+
+    table {
+        width: 100%;
+        text-align: left;
+        padding: 20px 0px;
+    }
+
+    .uncolor {
+        font-size: 16px;
+        color: black;
+        text-decoration: none;
+    }
+
+    td,
+    th {
+        border: 1px solid rgb(0, 0, 0);
+        padding: 8px;
+    }
+
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    tr:hover {
+        background-color: #a8a8a8;
+    }
+
+    thead {
+        background-color: #dddddd;
     }
 </style>
 
 <body>
+    {% include 'nav.html' %}
+
     {% if object_list %}
-    <ul>
+    <table>
 
         {% if human_list %}
-        {% for human in human_list %}
-        <li><a href="{% url 'web:human-detail' human.id %}">{{ human.name }}</a></li>
-        {% endfor %}
+        <thead>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Description</th>
+            <th>Home</th>
+        </thead>
+
+        <tbody>
+            {% for human in human_list %}
+            <tr>
+                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.gender }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.birth_date }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.description }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.home }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
         {% endif %}
 
 
         {% if cat_list %}
-        {% for cat in cat_list %}
-        <li><a href="{% url 'web:cat-detail' cat.id %}">{{ cat.name }}</a></li>
-        {% endfor %}
+        <thead>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Description</th>
+            <th>Breed</th>
+            <th>Owner</th>
+        </thead>
+
+        <tbody>
+            {% for cat in cat_list %}
+            <tr>
+                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.gender }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.birth_date }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.description }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.breed }}</a></td>
+                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.owner }}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
         {% endif %}
 
         {% if home_list %}
-        {% for home in home_list %}
-        <li><a href="{% url 'web:home-detail' home.id %}">{{ home.name }}</a></li>
-        {% endfor %}
+        <thead>
+            <th>Name</th>
+            <th>Address</th>
+            <th>House Type</th>
+        </thead>
+
+        <tbody>
+            {% for home in home_list %}
+            <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.name }}</a></td>
+            <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.address }}</a></td>
+            <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.house_type }}</a></td>
+            {% endfor %}
+        </tbody>
         {% endif %}
 
         {% if breed_list %}
-        {% for breed in breed_list %}
-        <li><a href="{% url 'web:breed-detail' breed.id %}">{{ breed.name }}</a></li>
-        {% endfor %}
+        <thead>
+            <th>Name</th>
+            <th>Origin</th>
+            <th>Description</th>
+        </thead>
+
+        <tbody>
+            {% for breed in breed_list %}
+            <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.name }}</a></td>
+            <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.address }}</a></td>
+            <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.house_type }}</a></td>
+            {% endfor %}
+        </tbody>
         {% endif %}
 
-    </ul>
+    </table>
     {% else %}
-    <p>No polls are available.</p>
+    <p>No data are available.</p>
     {% endif %}
 
     <div>
