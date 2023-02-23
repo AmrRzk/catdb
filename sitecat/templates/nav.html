@@ -1,4 +1,8 @@
 <style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+    }
+
     ul {
         list-style-type: none;
         margin: 0;
@@ -31,10 +35,12 @@
 </style>
 
 
-<ul>
-    <li><a href="{% url 'web:index' %}">Home</a></li>
-    <li><a href="{% url 'web:human-list' %}">Human List</a></li>
-    <li><a href="{% url 'web:cat-list' %}">Cat List</a></li>
-    <li><a href="{% url 'web:breed-list' %}">Breed List</a></li>
-    <li><a href="{% url 'web:home-list' %}">Home List</a></li>
-</ul>
+<body>
+    <ul>
+        <li><a href="{% url 'sitecat:index' %}">Home</a></li>
+        <li><a href="{% url 'sitecat:human-list' %}">Human List</a></li>
+        <li><a href="{% url 'sitecat:cat-list' %}">Cat List</a></li>
+        <li><a href="{% url 'sitecat:breed-list' %}">Breed List</a></li>
+        <li><a href="{% url 'sitecat:home-list' %}">Home List</a></li>
+    </ul>
+</body>

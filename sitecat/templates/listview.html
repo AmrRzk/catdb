@@ -1,6 +1,10 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
 <style>
     body {
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-family: 'Open Sans', sans-serif;
     }
 
     .btn {
@@ -69,11 +73,11 @@
         <tbody>
             {% for human in human_list %}
             <tr>
-                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.name }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.gender }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.birth_date }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.description }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:human-detail' human.id %}">{{ human.home }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:human-detail' human.id %}">{{ human.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:human-detail' human.id %}">{{ human.gender }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:human-detail' human.id %}">{{ human.birth_date }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:human-detail' human.id %}">{{ human.description }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:human-detail' human.id %}">{{ human.home }}</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -93,12 +97,12 @@
         <tbody>
             {% for cat in cat_list %}
             <tr>
-                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.name }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.gender }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.birth_date }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.description }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.breed }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:cat-detail' cat.id %}">{{ cat.owner }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:cat-detail' cat.id %}">{{ cat.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:cat-detail' cat.id %}">{{ cat.gender }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:cat-detail' cat.id %}">{{ cat.birth_date }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:cat-detail' cat.id %}">{{ cat.description }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:cat-detail' cat.id %}">{{ cat.breed }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:cat-detail' cat.id %}">{{ cat.owner }}</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -115,9 +119,9 @@
         <tbody>
             {% for home in home_list %}
             <tr>
-                <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.name }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.address }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:home-detail' home.id %}">{{ home.house_type }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:home-detail' home.id %}">{{ home.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:home-detail' home.id %}">{{ home.address }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:home-detail' home.id %}">{{ home.house_type }}</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -133,9 +137,9 @@
         <tbody>
             {% for breed in breed_list %}
             <tr>
-                <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.name }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.origin }}</a></td>
-                <td><a class="uncolor" href="{% url 'web:breed-detail' breed.id %}">{{ breed.description }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:breed-detail' breed.id %}">{{ breed.name }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:breed-detail' breed.id %}">{{ breed.origin }}</a></td>
+                <td><a class="uncolor" href="{% url 'sitecat:breed-detail' breed.id %}">{{ breed.description }}</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -149,19 +153,19 @@
 
     <div>
         {% if request.path == "/human" %}
-        <a class='btn' href="{% url 'web:human-create' %}">Create New</a>
+        <a class='btn' href="{% url 'sitecat:human-create' %}">Create New</a>
         {% endif %}
 
         {% if request.path == "/cat" %}
-        <a class='btn' href="{% url 'web:cat-create' %}">Create New</a>
+        <a class='btn' href="{% url 'sitecat:cat-create' %}">Create New</a>
         {% endif %}
 
         {% if request.path == "/home" %}
-        <a class='btn' href="{% url 'web:home-create' %}">Create New</a>
+        <a class='btn' href="{% url 'sitecat:home-create' %}">Create New</a>
         {% endif %}
 
         {% if request.path == "/breed" %}
-        <a class='btn' href="{% url 'web:breed-create' %}">Create New</a>
+        <a class='btn' href="{% url 'sitecat:breed-create' %}">Create New</a>
         {% endif %}
 
     </div>

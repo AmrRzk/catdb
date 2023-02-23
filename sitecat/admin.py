@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from .models import Human, Cat, Breed, Home
 # Register your models here.
+
+from .models import Human, Cat, Breed, Home
 admin.site.register(Human)
 admin.site.register(Cat)
 admin.site.register(Breed)

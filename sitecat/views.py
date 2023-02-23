@@ -1,5 +1,5 @@
-from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView
-from django.forms import ModelForm
+from django.shortcuts import render
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 
 from .forms import HumanForm, CatForm, BreedForm, HomeForm
 from .models import Human, Cat, Breed, Home

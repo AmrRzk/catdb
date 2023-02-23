@@ -34,7 +34,7 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
-    'web.apps.WebConfig',
+    'sitecat.apps.SitecatConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

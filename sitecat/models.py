@@ -1,8 +1,4 @@
-import datetime
-
 from django.db import models
-from django.utils import timezone
-from django.contrib import admin
 
 
 class Home(models.Model):
@@ -25,7 +21,7 @@ class Home(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.house_type}: {self.address}"
+        return f"{self.name}: {self.address}"
 
 
 class Human(models.Model):
@@ -56,8 +52,13 @@ class Breed(models.Model):
 
 
 class Cat(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+    ]
     name = models.CharField(max_length=200)
-    gender = models.CharField(max_length=20)
+    gender = models.CharField(
+        max_length=2, choices=GENDER_CHOICES, default='M')
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     breed = models.ForeignKey(
