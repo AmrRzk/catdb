@@ -24,11 +24,25 @@ def edit(request: HttpRequest, Form: forms.ModelForm, model: models.Model, url_n
         if form.is_valid():
             form.save()
             messages.success(
-                request, 'The post has been updated successfully.')
+                request, 'The record has been updated successfully.')
             return redirect(reverse(url_name, args=[id]))
         else:
             messages.error(request, 'Please correct the following errors:')
             return render(request, 'form.html', {'form': form})
+
+
+def delete(request: HttpRequest, model: models.Model, model_type: str, url: str, id: int):
+    context = dict(zip((model_type, 'id'), (model, id)))
+    if request.method == "POST":
+        model.delete()
+        messages.success(
+            request, 'The record has been successfully deleted')
+        return redirect(reverse(url))
+    else:
+        messages.error(
+            request, 'An error has occured while trying to delete the object')
+        context["error_msg"] = "Deletion of record is unsuccessful"
+        return render(request, 'detailview.html', context)
 
 
 class Human:
@@ -50,6 +64,10 @@ class Human:
         human = get_object_or_404(HumanModel, id=pk)
         return edit(request, HumanForm, human, 'sitecat:human-detail', pk)
 
+    def delete_human(request, pk):
+        human = get_object_or_404(HumanModel, id=pk)
+        return delete(request, human, 'human', 'sitecat:human-list', pk)
+
 
 class Cat:
     class List(ListView):
@@ -68,6 +86,10 @@ class Cat:
     def edit_cat(request, pk):
         cat = get_object_or_404(CatModel, id=pk)
         return edit(request, CatForm, cat, 'sitecat:cat-detail', pk)
+
+    def delete_cat(request, pk):
+        cat = get_object_or_404(CatModel, id=pk)
+        return delete(request, cat, 'cat', 'sitecat:cat-list', pk)
 
 
 class Home:
@@ -88,6 +110,10 @@ class Home:
         home = get_object_or_404(HomeModel, id=pk)
         return edit(request, HomeForm, home, 'sitecat:home-detail', pk)
 
+    def delete_home(request, pk):
+        home = get_object_or_404(HomeModel, id=pk)
+        return delete(request, home, 'home', 'sitecat:home-list', pk)
+
 
 class Breed:
     class List(ListView):
@@ -106,3 +132,7 @@ class Breed:
     def edit_breed(request, pk):
         breed = get_object_or_404(BreedModel, id=pk)
         return edit(request, BreedForm, breed, 'sitecat:breed-detail', pk)
+
+    def delete_breed(request, pk):
+        breed = get_object_or_404(BreedModel, id=pk)
+        return delete(request, breed, 'breed', 'sitecat:breed-list', pk)
