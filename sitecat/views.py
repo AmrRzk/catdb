@@ -55,6 +55,13 @@ class Human:
         model = HumanModel
         template_name = 'detailview.html'
 
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            cat_list = HumanModel.objects.get(id=self.kwargs.get('pk'))
+            context['cat_count'] = cat_list.cat_set.count()
+            context['cat_list'] = cat_list.cat_set.all()
+            return context
+
     class Form(CreateView):
         form_class = HumanForm
         template_name = 'form.html'
@@ -77,6 +84,9 @@ class Cat:
     class Detail(DetailView):
         model = CatModel
         template_name = 'detailview.html'
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
 
     class Form(CreateView):
         form_class = CatForm

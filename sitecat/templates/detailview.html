@@ -87,6 +87,15 @@
     .popup-div {
         display: inline-block;
     }
+
+    .cat-list {
+        background-color: white;
+        padding-bottom: 20px;
+    }
+
+    .cat-list li {
+        padding-left: 20px;
+    }
 </style>
 
 
@@ -137,6 +146,13 @@
         <hr />
         <p>Address: {{ human.home }}</p>
         <p>Description: {{ human.description }}</p>
+        <p>Cats Owned: {{ cat_count }}</p>
+        Cats:
+        <ul class="cat-list">
+            {% for cat in cat_list %}
+            <li>- {{ cat.name }} | {{ cat.breed.origin }}</li>
+            {% endfor %}
+        </ul>
 
         <div class="links">
             <a href="{% url 'sitecat:human-edit' human.id %}" class="btn-text">

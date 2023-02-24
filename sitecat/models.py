@@ -35,7 +35,7 @@ class Human(models.Model):
         max_length=2, choices=GENDER_CHOICES, default='N')
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
-    home = models.ForeignKey(Home, related_name='human',
+    home = models.ForeignKey(Home,
                              on_delete=models.CASCADE)
 
     def __str__(self) -> str:
@@ -62,9 +62,9 @@ class Cat(models.Model):
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     breed = models.ForeignKey(
-        Breed, related_name='cats', on_delete=models.CASCADE)
+        Breed, on_delete=models.CASCADE)
     owner = models.ForeignKey(
-        Human, related_name='cats', on_delete=models.CASCADE)
+        Human, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.name
