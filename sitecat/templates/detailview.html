@@ -139,6 +139,7 @@
         {{ error_msg }}
     </h3>
     {% endif %}
+
     {% if human %}
     <div class="card">
         <h1>{{ human.name }}</h1>
@@ -147,12 +148,14 @@
         <p>Address: {{ human.home }}</p>
         <p>Description: {{ human.description }}</p>
         <p>Cats Owned: {{ cat_count }}</p>
+        {% if cat_count > 0 %}
         Cats:
         <ul class="cat-list">
             {% for cat in cat_list %}
             <li>- {{ cat.name }} | {{ cat.breed.origin }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
 
         <div class="links">
             <a href="{% url 'sitecat:human-edit' human.id %}" class="btn-text">

@@ -85,9 +85,6 @@ class Cat:
         model = CatModel
         template_name = 'detailview.html'
 
-        def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-
     class Form(CreateView):
         form_class = CatForm
         template_name = 'form.html'
