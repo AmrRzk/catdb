@@ -31,20 +31,22 @@ class BreedType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
+
     all_humans = graphene.List(HumanType)
     all_cats = graphene.List(CatType)
     all_homes = graphene.List(HomeType)
     all_breeds = graphene.List(BreedType)
 
-    human_by_name = graphene.Field(
-        HumanType, name=graphene.String(required=True)
+    human_by_id = graphene.Field(
+        HumanType, id=graphene.ID(required=True)
     )
-    cat_by_name = graphene.Field(CatType, name=graphene.String(required=True))
-    home_by_name = graphene.Field(
-        HomeType, name=graphene.String(required=True)
+    cat_by_id = graphene.Field(CatType, id=graphene.ID(required=True))
+    home_by_id = graphene.Field(
+        HomeType, id=graphene.ID(required=True)
     )
-    breed_by_name = graphene.Field(
-        BreedType, name=graphene.String(required=True))
+    breed_by_id = graphene.Field(
+        BreedType, id=graphene.ID(required=True)
+    )
 
     def resolve_all_humans(root, info):
         return Human.objects.all()
@@ -58,17 +60,43 @@ class Query(graphene.ObjectType):
     def resolve_all_breeds(root, info):
         return Breed.objects.all()
 
-    def resolve_human_by_name(root, info, name):
-        return Human.objects.get(name=name)
+    def resolve_human_by_id(root, info, id):
+        return Human.objects.get(id=id)
 
-    def resolve_cat_by_name(root, info, name):
-        return Cat.objects.get(name=name)
+    def resolve_cat_by_id(root, info, id):
+        return Cat.objects.get(id=id)
 
-    def resolve_home_by_name(root, info, name):
-        return Home.objects.get(name=name)
+    def resolve_home_by_id(root, info, id):
+        return Home.objects.get(id=id)
 
-    def resolve_breed_by_name(root, info, name):
-        return Breed.objects.get(name=name)
+    def resolve_breed_by_id(root, info, id):
+        return Breed.objects.get(id=id)
 
 
-schema = graphene.Schema(query=Query)
+class HumanMutation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID()
+        name = graphene.String(required=True)
+        gender = graphene.String(required=True)
+        birth_date = graphene.Date(required=True)
+        description = graphene.String()
+        home_name = graphene.String(required=True)
+
+    @classmethod
+    def mutate(cls, root, info, name, gender, birth_date, description, home_name):
+        human = Human.objects.get(pk=id)
+        human.name = name
+        human.gender = gender
+        human.birth_date = birth_date
+        human.description = description
+        human.home = Home.objects.get(name=home_name)
+        human.save()
+
+        return HumanMutation(human=human)
+
+
+class Mutation(graphene.ObjectType):
+    update_human = HumanMutation.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
