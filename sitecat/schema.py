@@ -98,22 +98,6 @@ class HumanMutation(graphene.Mutation):
         return HumanMutation(human=human)
 
 
-class HumanMutateName(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID()
-        name = graphene.String(required=True)
-
-    human = graphene.Field(HumanType)
-
-    @classmethod
-    def mutate(cls, root, info, name, id):
-        human = Human.objects.get(id=id)
-        human.name = name
-        human.save()
-
-        return HumanMutateName(human=human)
-
-
 class HomeMutation(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
@@ -137,7 +121,6 @@ class HomeMutation(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     update_human = HumanMutation.Field()
     update_home = HomeMutation.Field()
-    update_human_name = HumanMutateName.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
