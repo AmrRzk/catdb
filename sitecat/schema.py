@@ -156,10 +156,10 @@ class DeleteCat(graphene.Mutation):
 class Mutation(graphene.ObjectType):
 
     # Update or Create
-    update_human = HumanMutation.Field()
-    update_home = HomeMutation.Field()
-    update_cat = CatMutation.Field()
-    update_breed = BreedMutation.Field()
+    create_or_update_human = HumanMutation.Field()
+    create_or_update_home = HomeMutation.Field()
+    create_or_update_cat = CatMutation.Field()
+    create_or_update_breed = BreedMutation.Field()
 
     # Delete
     delete_human = DeleteHuman.Field()
