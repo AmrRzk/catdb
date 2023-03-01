@@ -80,11 +80,37 @@ class HumanMutation(SerializerMutation):
         serializer_class = HumanSerializer
 
 
+class DeleteHuman(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        human = Human.objects.get(pk=kwargs.get('id'))
+        human.delete()
+        return DeleteHuman(ok=True)
+
+
 class HomeMutation(SerializerMutation):
     class Meta:
         serializer_class = HomeSerializer
         model_operations = ['create', 'update']
         lookup_field = "id"
+
+
+class DeleteHome(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        home = Home.objects.get(pk=kwargs.get('id'))
+        Home.delete()
+        return DeleteHome(ok=True)
 
 
 class BreedMutation(SerializerMutation):
@@ -94,6 +120,19 @@ class BreedMutation(SerializerMutation):
         lookup_field = "id"
 
 
+class DeleteBreed(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        breed = Breed.objects.get(pk=kwargs.get('id'))
+        breed.delete()
+        return DeleteBreed(ok=True)
+
+
 class CatMutation(SerializerMutation):
     class Meta:
         serializer_class = CatSerializer
@@ -101,11 +140,32 @@ class CatMutation(SerializerMutation):
         lookup_field = "id"
 
 
+class DeleteCat(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate(cls, root, info, **kwargs):
+        cat = Cat.objects.get(pk=kwargs.get('id'))
+        cat.delete()
+        return DeleteCat(ok=True)
+
+
 class Mutation(graphene.ObjectType):
+
+    # Update or Create
     update_human = HumanMutation.Field()
     update_home = HomeMutation.Field()
     update_cat = CatMutation.Field()
     update_breed = BreedMutation.Field()
+
+    # Delete
+    delete_human = DeleteHuman.Field()
+    delete_home = DeleteHome.Field()
+    delete_cat = DeleteCat.Field()
+    delete_breed = DeleteBreed.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
