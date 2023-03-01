@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 
 class HomeSerializer(serializers.ModelSerializer):
+    house_type = serializers.CharField(max_length=20)
+
     class Meta:
         model = Home
         fields = ["id", "name", "address", "house_type"]
@@ -10,6 +12,7 @@ class HomeSerializer(serializers.ModelSerializer):
 
 class HumanSerializer(serializers.ModelSerializer):
     home = HomeSerializer()
+    gender = serializers.CharField(max_length=1)
 
     class Meta:
         model = Human
