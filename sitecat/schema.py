@@ -1,7 +1,9 @@
 import graphene
 from graphene_django import DjangoObjectType
+from graphene_django.rest_framework.mutation import SerializerMutation
 
 from .models import Human, Cat, Home, Breed
+from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
 
 
 class HumanType(DjangoObjectType):
@@ -21,7 +23,7 @@ class CatType(DjangoObjectType):
 class HomeType(DjangoObjectType):
     class Meta:
         model = Home
-        fields = ["id", "name", "address", "house_type", "human_set"]
+        fields = ["id", "name", "address", "house_type"]
 
 
 class BreedType(DjangoObjectType):
@@ -73,113 +75,37 @@ class Query(graphene.ObjectType):
         return Breed.objects.get(id=id)
 
 
-class HumanSchema:
-    class Mutation(graphene.Mutation):
-        class Arguments:
-            id = graphene.ID()
-            name = graphene.String(required=True)
-            gender = graphene.String(required=True)
-            birth_date = graphene.Date(required=True)
-            description = graphene.String()
-            home_name = graphene.String(required=True)
-
-        human = graphene.Field(HumanType)
-
-        @classmethod
-        def mutate(cls, root, info, id,  name, gender, birth_date, description, home_name):
-            human = Human.objects.get(id=id)
-            human.name = name
-            human.gender = gender
-            human.birth_date = birth_date
-            human.description = description
-            human.home = Home.objects.get(name=home_name)
-            human.save()
-            print(human)
-
-            return HumanSchema.Mutation(human=human)
-
-    class Delete(graphene.Mutation):
-        class Arguments:
-            id = graphene.ID()
-        human = graphene.Field(Human)
-
-        @classmethod
-        def mutate(cls, root, info, id):
-            human = Human.objects.get(id=id)
-            human.delete()
-            return HumanSchema.Delete(human=human)
+class HumanMutation(SerializerMutation):
+    class Meta:
+        serializer_class = HumanSerializer
 
 
-class HomeMutation(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID()
-        name = graphene.String(required=True)
-        address = graphene.String(required=True)
-        house_type = graphene.String(required=True)
-
-    home = graphene.Field(HomeType)
-
-    @classmethod
-    def mutate(cls, root, info, id, name, address, house_type):
-        home = Home.objects.get(id=id)
-        home.name = name
-        home.address = address
-        home.house_type = house_type
-        home.save()
-
-        return HomeMutation(home=home)
+class HomeMutation(SerializerMutation):
+    class Meta:
+        serializer_class = HomeSerializer
+        model_operations = ['create', 'update']
+        lookup_field = "id"
 
 
-class BreedMutation():
-
-    class Arguments:
-        id = graphene.ID()
-        name = graphene.String(required=True)
-        origin = graphene.String(required=True)
-        description = graphene.String(required=True)
-
-    breed = graphene.Field(BreedType)
-
-    @classmethod
-    def mutate(cls, root, info, id, name, origin, description):
-        breed = Breed.objects.get(id=id)
-        breed.name = name
-        breed.origin = origin
-        breed.description = description
-        breed.save()
-
-        return BreedMutation(breed=breed)
+class BreedMutation(SerializerMutation):
+    class Meta:
+        serializer_class = BreedSerializer
+        model_operations = ['create', 'update']
+        lookup_field = "id"
 
 
-class CatMutation():
-    class Arguments:
-        id = graphene.ID()
-        name = graphene.String(required=True)
-        gender = graphene.String(required=True)
-        birth_date = graphene.Date(required=True)
-        description = graphene.String()
-        breed_name = graphene.String()
-        owner_name = graphene.String()
-
-    cat = graphene.Field(CatType)
-
-    @classmethod
-    def mutate(cls, root, info, id, name, gender, birth_date, description, breed_name, owner_name):
-        cat = Cat.objects.get(id=id)
-        cat.name = name
-        cat.gender = gender
-        cat.birth_date = birth_date
-        cat.description = description
-        cat.breed = Breed.objects.get(name=breed_name)
-        cat.owner = Human.objects.get(name=owner_name)
-        cat.save()
-
-        return CatMutation(cat=cat)
+class CatMutation(SerializerMutation):
+    class Meta:
+        serializer_class = CatSerializer
+        model_operations = ['create', 'update']
+        lookup_field = "id"
 
 
 class Mutation(graphene.ObjectType):
     update_human = HumanMutation.Field()
     update_home = HomeMutation.Field()
+    update_cat = CatMutation.Field()
+    update_breed = BreedMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
