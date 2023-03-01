@@ -19,6 +19,7 @@ class HumanSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print("It went into create")
         home_data = validated_data.pop('home')
         home, created = Home.objects.get_or_create(**home_data)
         human = Human.objects.create(home=home, **validated_data)
@@ -26,9 +27,9 @@ class HumanSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         home_data = validated_data.pop('home')
-        home = Home.objects.get_or_create(**home_data)
-        instance.home = home
+        home, created = Home.objects.get_or_create(**home_data)
 
+        instance.home = home
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
