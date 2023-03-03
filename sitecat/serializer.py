@@ -20,9 +20,6 @@ class HumanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Human
         fields = "__all__"
-        extra_kwargs = {
-            'id': {'read_only': False, 'required': False}
-        }
 
     # if no ID is provided, it will go to this create function
     def create(self, validated_data):
