@@ -13,7 +13,7 @@ class HomeSerializer(serializers.ModelSerializer):
 
 class HumanSerializer(serializers.ModelSerializer):
     home = HomeSerializer()
-    gender = serializers.CharField(max_length=1, required=False)
+    gender = serializers.ChoiceField(choices=Human.GENDER_CHOICES)
     description = serializers.CharField(max_length=200, required=False)
     birth_date = serializers.DateField(required=False)
 

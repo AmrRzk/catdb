@@ -1,0 +1,8 @@
+from graphene_django.rest_framework.serializer_converter import get_graphene_type_from_serializer_field
+from rest_framework import serializers
+import graphene
+
+
+@get_graphene_type_from_serializer_field.register(serializers.ChoiceField)
+def convert_choices_to_string(field):
+    return graphene.String

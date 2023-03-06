@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_django_extras import DjangoObjectField, DjangoFilterListField, DjangoSerializerType
+from graphene_django.rest_framework.serializer_converter import convert_serializer_field
 
 from rest_framework import serializers
 
@@ -39,12 +40,7 @@ class HumanModelType(DjangoSerializerType):
 
     class Meta:
         serializer_class = HumanSerializer
-        filter_fields = {
-            "name": ['exact', 'icontains'],
-            "gender": ['exact'],
-            "description": ['icontains'],
-            "birth_date": ['gte', 'lte']
-        }
+        filterset_class = HumanFilter
 
 
 class CatModelType(DjangoSerializerType):
