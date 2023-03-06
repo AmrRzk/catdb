@@ -40,7 +40,7 @@ class HumanModelType(DjangoSerializerType):
 
     class Meta:
         serializer_class = HumanSerializer
-        filterset_class = HumanFilter
+        # filterset_class = HumanFilter
 
 
 class CatModelType(DjangoSerializerType):
