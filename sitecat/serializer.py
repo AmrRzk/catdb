@@ -19,10 +19,11 @@ class HumanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Human
-        fields = "__all__"
+        fields = ["id", "name", "gender", "birth_date", "description", "home"]
 
     # if no ID is provided, it will go to this create function
     def create(self, validated_data):
+        print("Went into create")
         home_data = validated_data.pop('home')
 
         # Creates new home if home is created, otherwise get from existing data
@@ -32,6 +33,7 @@ class HumanSerializer(serializers.ModelSerializer):
 
     # if ID is provided, it will lookup and get the related instance
     def update(self, instance, validated_data):
+        print("Went into update")
         home_data = validated_data.pop('home')
 
         # Creates new home if home is created, otherwise get from existing data

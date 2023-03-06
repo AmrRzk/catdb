@@ -1,7 +1,9 @@
 import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
-from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, DjangoObjectField, DjangoFilterListField
+from graphene_django_extras import DjangoObjectField, DjangoFilterListField, DjangoSerializerType
+
+from rest_framework import serializers
 
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed
@@ -33,6 +35,36 @@ class BreedType(DjangoObjectType):
         filterset_class = BreedFilter
 
 
+class HumanModelType(DjangoSerializerType):
+
+    class Meta:
+        serializer_class = HumanSerializer
+        filter_fields = {
+            "name": ['exact', 'icontains'],
+            "gender": ['exact'],
+            "description": ['icontains'],
+            "birth_date": ['gte', 'lte']
+        }
+
+
+class CatModelType(DjangoSerializerType):
+    class Meta:
+        serializer_class = CatSerializer
+        filterset_class = CatFilter
+
+
+class BreedModelType(DjangoSerializerType):
+    class Meta:
+        serializer_class = BreedSerializer
+        filterset_class = BreedFilter
+
+
+class HomeModelType(DjangoSerializerType):
+    class Meta:
+        serializer_class = HomeSerializer
+        filterset_class = HomeFilter
+
+
 class Query(graphene.ObjectType):
 
     all_humans = DjangoFilterListField(HumanType)
@@ -46,97 +78,22 @@ class Query(graphene.ObjectType):
     breed = DjangoObjectField(BreedType)
 
 
-class HumanMutation(SerializerMutation):
-    class Meta:
-        serializer_class = HumanSerializer
-
-
-class DeleteHuman(graphene.Mutation):
-    ok = graphene.Boolean()
-
-    class Arguments:
-        id = graphene.ID()
-
-    @classmethod
-    def mutate(cls, root, info, **kwargs):
-        human = Human.objects.get(pk=kwargs.get('id'))
-        human.delete()
-        return DeleteHuman(ok=True)
-
-
-class HomeMutation(SerializerMutation):
-    class Meta:
-        serializer_class = HomeSerializer
-        model_operations = ['create', 'update']
-        lookup_field = "id"
-
-
-class DeleteHome(graphene.Mutation):
-    ok = graphene.Boolean()
-
-    class Arguments:
-        id = graphene.ID()
-
-    @classmethod
-    def mutate(cls, root, info, **kwargs):
-        home = Home.objects.get(pk=kwargs.get('id'))
-        Home.delete()
-        return DeleteHome(ok=True)
-
-
-class BreedMutation(SerializerMutation):
-    class Meta:
-        serializer_class = BreedSerializer
-        model_operations = ['create', 'update']
-        lookup_field = "id"
-
-
-class DeleteBreed(graphene.Mutation):
-    ok = graphene.Boolean()
-
-    class Arguments:
-        id = graphene.ID()
-
-    @classmethod
-    def mutate(cls, root, info, **kwargs):
-        breed = Breed.objects.get(pk=kwargs.get('id'))
-        breed.delete()
-        return DeleteBreed(ok=True)
-
-
-class CatMutation(SerializerMutation):
-    class Meta:
-        serializer_class = CatSerializer
-        model_operations = ['create', 'update']
-        lookup_field = "id"
-
-
-class DeleteCat(graphene.Mutation):
-    ok = graphene.Boolean()
-
-    class Arguments:
-        id = graphene.ID()
-
-    @classmethod
-    def mutate(cls, root, info, **kwargs):
-        cat = Cat.objects.get(pk=kwargs.get('id'))
-        cat.delete()
-        return DeleteCat(ok=True)
-
-
 class Mutation(graphene.ObjectType):
+    create_human = HumanModelType.CreateField(description="Create Human")
+    update_human = HumanModelType.UpdateField(description="Update Human")
+    delete_human = HumanModelType.DeleteField(description="Delete Human")
 
-    # Update or Create
-    create_or_update_human = HumanMutation.Field()
-    create_or_update_home = HomeMutation.Field()
-    create_or_update_cat = CatMutation.Field()
-    create_or_update_breed = BreedMutation.Field()
+    create_cat = CatModelType.CreateField(description="Create Cat")
+    update_cat = CatModelType.UpdateField(description="Update Cat")
+    delete_cat = CatModelType.DeleteField(description="Delete Cat")
 
-    # Delete
-    delete_human = DeleteHuman.Field()
-    delete_home = DeleteHome.Field()
-    delete_cat = DeleteCat.Field()
-    delete_breed = DeleteBreed.Field()
+    create_breed = BreedModelType.CreateField(description="Create Breed")
+    update_breed = BreedModelType.UpdateField(description="Update Breed")
+    delete_breed = BreedModelType.DeleteField(description="Delete Breed")
+
+    create_home = HomeModelType.CreateField(description="Create Home")
+    update_home = HomeModelType.UpdateField(description="Update Home")
+    delete_home = HomeModelType.DeleteField(description="Delete Home")
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
