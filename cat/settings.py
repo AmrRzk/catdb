@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'django_filters',
-    'rest_framework'
+    'rest_framework',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf'
 ]
 
 MIDDLEWARE = [
@@ -150,4 +152,8 @@ GRAPHENE_DJANGO_EXTRAS = {
     'MAX_PAGE_SIZE': 50,
     'CACHE_ACTIVE': True,
     'CACHE_TIMEOUT': 300    # seconds
+}
+
+ELASTICSEARCH_DSL = {
+    "default": {"hosts": "localhost:9200"}
 }

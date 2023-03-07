@@ -2,6 +2,7 @@ version: '3.10'
 
 services:
   web:
+      container_name: django
       build: .
       command: python manage.py runserver 0.0.0.0:8000
       volumes:
@@ -11,9 +12,17 @@ services:
       depends_on:
         - db
   db:
+    container_name: postgres
     image: postgres
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./data/db:/var/lib/postgrsesql/data
+  esearch:
+    container_name: search
+    image: elasticsearch:8.6.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
 
