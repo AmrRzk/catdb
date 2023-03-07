@@ -20,7 +20,6 @@ services:
   es:
     image: elasticsearch:7.17.9
     environment:
-      - xpack.security.enabled=false
       - discovery.type=single-node
     ports:
       - "9200:9200"
