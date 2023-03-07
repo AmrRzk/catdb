@@ -5,10 +5,8 @@ certifi==2022.12.7
 Django==4.1.7
 django-browser-reload==1.6.0
 django-elasticsearch-dsl==7.3
-django-elasticsearch-dsl-drf==0.22.5
 django-filter==22.1
 django-nine==0.2.7
-django-tailwind==3.5.0
 djangorestframework==3.14.0
 elasticsearch==7.17.9
 elasticsearch-dsl==7.4.1
