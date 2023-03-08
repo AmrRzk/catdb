@@ -154,5 +154,7 @@ GRAPHENE_DJANGO_EXTRAS = {
 }
 
 ELASTICSEARCH_DSL = {
-    "default": {"hosts": "localhost:9200"}
+    "default": {
+        "hosts": "es:9200"
+    }
 }
