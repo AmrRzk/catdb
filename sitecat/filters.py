@@ -14,18 +14,14 @@ class ElasticSearchFilter(django_filters.Filter):
         super().__init__(**kwargs)
 
     def filter(self, qs, value):
-        print("\nSuccesfully went into filter function in ElasticSearchFilter\n")
-        print(f"\n{qs}: {value}\n")
         if not value or not self.fields:
-            print("\nNo value is present\n")
             return qs
 
-        search = Search(index='humans')
+        search = Search(index=self.document_class._index._name)
         search = search.query(
             Q('multi_match', query=value, fields=self.fields))
 
         response = search.execute()
-        pprint.pprint(response)
         ids = [hit.meta.id for hit in response]
 
         return qs.filter(id__in=ids)
