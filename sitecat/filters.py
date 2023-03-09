@@ -28,10 +28,22 @@ class ElasticSearchFilter(django_filters.Filter):
 
 
 class HumanFilter(django_filters.FilterSet):
-    search = ElasticSearchFilter(document_class=HumanDocument, fields=[
-                                 'name', 'description'])
+    search = django_filters.CharFilter(method="search_method")
     id = django_filters.rest_framework.NumberFilter(
         field_name="id", required=False)
+
+    def search_method(self, qs, name, value):
+        if not value:
+            return qs
+
+        search = Search(index=HumanDocument._index._name)
+        search = search.query(
+            Q('multi_match', query=value, fields=['name', 'description']))
+
+        response = search.execute()
+        ids = [hit.meta.id for hit in response]
+
+        return qs.filter(id__in=ids)
 
     class Meta:
         model = Human
