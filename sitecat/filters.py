@@ -1,8 +1,39 @@
 import django_filters
+
+import pprint
+from django_elasticsearch_dsl import Document
 from .models import Human, Home, Cat, Breed
+from elasticsearch_dsl import Search, Q
+from .documents import HumanDocument
+
+
+class ElasticSearchFilter(django_filters.Filter):
+    def __init__(self, document_class: Document, fields=None, **kwargs):
+        self.document_class = document_class
+        self.fields = fields
+        super().__init__(**kwargs)
+
+    def filter(self, qs, value):
+        print("\nSuccesfully went into filter function in ElasticSearchFilter\n")
+        print(f"\n{qs}: {value}\n")
+        if not value or not self.fields:
+            print("\nNo value is present\n")
+            return qs
+
+        search = Search(index='humans')
+        search = search.query(
+            Q('multi_match', query=value, fields=self.fields))
+
+        response = search.execute()
+        pprint.pprint(response)
+        ids = [hit.meta.id for hit in response]
+
+        return qs.filter(id__in=ids)
 
 
 class HumanFilter(django_filters.FilterSet):
+    search = ElasticSearchFilter(document_class=HumanDocument, fields=[
+                                 'name', 'description'])
     id = django_filters.rest_framework.NumberFilter(
         field_name="id", required=False)
 

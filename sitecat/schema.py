@@ -9,6 +9,7 @@ from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSer
 
 
 class HumanType(DjangoObjectType):
+
     class Meta:
         model = Human
         description = "Single User Type"

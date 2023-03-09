@@ -8,11 +8,7 @@ from .models import Human, Home, Cat, Breed
 class HumanDocument(Document):
     class Index:
         name = "humans"
-        settings = {
-            'number_of_shards': 1,
-            'number_of_replicas': 0
-        }
 
     class Django:
         model = Human
-        fields = ["id", "name", "description"]
+        fields = ["id", "name", "description", "gender", "birth_date"]
