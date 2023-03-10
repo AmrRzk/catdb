@@ -1,10 +1,9 @@
 import django_filters
 
-import pprint
 from django_elasticsearch_dsl import Document
 from .models import Human, Home, Cat, Breed
 from elasticsearch_dsl import Search, Q
-from .documents import HumanDocument
+from .documents import HumanDocument, HomeDocument, BreedDocument, CatDocument
 
 
 class ElasticSearchFilter(django_filters.Filter):
@@ -28,22 +27,11 @@ class ElasticSearchFilter(django_filters.Filter):
 
 
 class HumanFilter(django_filters.FilterSet):
-    search = django_filters.CharFilter(method="search_method")
+    search = ElasticSearchFilter(document_class=HumanDocument, fields=[
+                                 'name', 'description'])
+
     id = django_filters.rest_framework.NumberFilter(
         field_name="id", required=False)
-
-    def search_method(self, qs, name, value):
-        if not value:
-            return qs
-
-        search = Search(index=HumanDocument._index._name)
-        search = search.query(
-            Q('multi_match', query=value, fields=['name', 'description']))
-
-        response = search.execute()
-        ids = [hit.meta.id for hit in response]
-
-        return qs.filter(id__in=ids)
 
     class Meta:
         model = Human
@@ -56,6 +44,8 @@ class HumanFilter(django_filters.FilterSet):
 
 
 class HomeFilter(django_filters.FilterSet):
+    search = ElasticSearchFilter(document_class=HomeDocument, fields=[
+                                 'name', 'address', 'house_type'])
     id = django_filters.rest_framework.NumberFilter(
         field_name="id", required=False)
 
@@ -69,6 +59,8 @@ class HomeFilter(django_filters.FilterSet):
 
 
 class CatFilter(django_filters.FilterSet):
+    search = ElasticSearchFilter(document_class=CatDocument, fields=[
+                                 'name', 'description'])
     id = django_filters.rest_framework.NumberFilter(
         field_name="id", required=False)
 
@@ -83,6 +75,8 @@ class CatFilter(django_filters.FilterSet):
 
 
 class BreedFilter(django_filters.FilterSet):
+    search = ElasticSearchFilter(document_class=BreedDocument, fields=[
+                                 'name', 'description'])
     id = django_filters.rest_framework.NumberFilter(
         field_name="id", required=False)
 
@@ -92,5 +86,4 @@ class BreedFilter(django_filters.FilterSet):
             "name": ("iexact", "icontains"),
             "origin": ("iexact", "icontains"),
             "description": ("icontains",),
-
         }
