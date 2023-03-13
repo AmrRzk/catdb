@@ -7,3 +7,4 @@ class SitecatConfig(AppConfig):
 
     def ready(self):
         from . import serializer_decorator
+        from . import signals

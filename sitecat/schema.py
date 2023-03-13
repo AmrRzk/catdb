@@ -56,7 +56,7 @@ class Query(graphene.ObjectType):
 
         if latest is None:
             latest = Cat.objects.order_by('id')[0]
-            cache.set('name', latest, 30)
+            cache.set('name', latest.name, 1500)
 
         return latest
 

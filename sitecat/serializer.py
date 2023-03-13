@@ -50,6 +50,7 @@ class HumanSerializer(serializers.ModelSerializer):
 
 class BreedSerializer(serializers.ModelSerializer):
     description = serializers.CharField(max_length=200, required=False)
+    origin = serializers.CharField(max_length=50, required=False)
 
     class Meta:
         model = Breed
