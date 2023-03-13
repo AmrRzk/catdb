@@ -11,6 +11,7 @@ services:
       depends_on:
         - db
         - es
+        - redis
   db:
     image: postgres
     environment:
@@ -23,4 +24,5 @@ services:
       - discovery.type=single-node
     ports:
       - "9200:9200"
-
+  redis:
+    image: redis:alpine

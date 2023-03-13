@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 
 class HomeSerializer(serializers.ModelSerializer):
-    house_type = serializers.CharField(max_length=20)
+    house_type = serializers.CharField(max_length=2, required=False)
     address = serializers.CharField(max_length=200, required=False)
 
     class Meta:
@@ -12,8 +12,9 @@ class HomeSerializer(serializers.ModelSerializer):
 
 
 class HumanSerializer(serializers.ModelSerializer):
-    home = HomeSerializer()
-    gender = serializers.ChoiceField(choices=Human.GENDER_CHOICES)
+    home = HomeSerializer(required=False)
+    gender = serializers.ChoiceField(
+        choices=Human.GENDER_CHOICES, required=False)
     description = serializers.CharField(max_length=200, required=False)
     birth_date = serializers.DateField(required=False)
 

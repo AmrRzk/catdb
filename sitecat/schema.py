@@ -3,6 +3,8 @@ from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, DjangoObjectField, DjangoFilterListField
 
+from django.core.cache import cache
+
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
@@ -45,6 +47,18 @@ class Query(graphene.ObjectType):
     cat = DjangoObjectField(CatType)
     home = DjangoObjectField(HomeType)
     breed = DjangoObjectField(BreedType)
+
+    latest_cat = graphene.String()
+
+    def resolve_latest_cat(root, info):
+
+        latest = cache.get('name')
+
+        if latest is None:
+            latest = Cat.objects.order_by('id')[0]
+            cache.set('name', latest, 30)
+
+        return latest
 
 
 class HumanMutation(SerializerMutation):
