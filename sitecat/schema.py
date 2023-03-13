@@ -52,13 +52,14 @@ class Query(graphene.ObjectType):
 
     def resolve_latest_cat(root, info):
 
-        latest = cache.get('name')
+        latest_name = cache.get('name')
 
-        if latest is None:
-            latest = Cat.objects.order_by('id')[0]
-            cache.set('name', latest.name, 1500)
+        if latest_name is None:
+            latest_cat = Cat.objects.order_by('id')[0]
+            latest_name = latest_cat.name
+            cache.set('name', latest_name, 1500)
 
-        return latest
+        return latest_name
 
 
 class HumanMutation(SerializerMutation):
