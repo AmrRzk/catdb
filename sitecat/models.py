@@ -45,7 +45,7 @@ class Human(models.Model):
 class Breed(models.Model):
     name = models.CharField(max_length=200)
     origin = models.CharField(max_length=100)
-    description = models.CharField(max_length=300)
+    description = models.CharField(max_length=700)
 
     def __str__(self) -> str:
         return self.name
