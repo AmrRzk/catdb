@@ -17,14 +17,8 @@ def update_breed(self):
             "origin": breed_data["origin"]
         }
 
-        breeds.append(breed)
+        breeds.append(Breed(**breed))
 
-    # get the breeds from db and compare it with the breeds from the API so that we don't add duplicates
-    db_breeds = [breed.name for breed in Breed.objects.all()]
-
-    new_breeds = [
-        Breed(**new_breed) for new_breed in breeds if new_breed['name'] not in db_breeds]
-
-    Breed.objects.bulk_create(new_breeds)
+    Breed.objects.bulk_create(breeds, ignore_conflicts=True)
 
     return "Data successfully updated"
