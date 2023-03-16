@@ -126,6 +126,11 @@ class CatMutation(SerializerMutation):
         model_operations = ['create', 'update']
         lookup_field = "id"
 
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):
+        print(super().mutate_and_get_payload(root, info, **input))
+        return super().mutate_and_get_payload(root, info, **input)
+
 
 class DeleteCat(graphene.Mutation):
     ok = graphene.Boolean()

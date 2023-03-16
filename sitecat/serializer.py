@@ -1,4 +1,4 @@
-from .models import Cat, Human, Breed, Home
+from .models import Cat, Human, Breed, Home, Gender
 from rest_framework import serializers
 
 
@@ -14,7 +14,7 @@ class HomeSerializer(serializers.ModelSerializer):
 class HumanSerializer(serializers.ModelSerializer):
     home = HomeSerializer(required=False)
     gender = serializers.ChoiceField(
-        choices=Human.GENDER_CHOICES, required=False)
+        choices=Gender.choices, required=False)
     description = serializers.CharField(max_length=200, required=False)
     birth_date = serializers.DateField(required=False)
 
@@ -60,35 +60,45 @@ class BreedSerializer(serializers.ModelSerializer):
 class CatSerializer(serializers.ModelSerializer):
     breed = BreedSerializer()
     owner = HumanSerializer()
-    gender = serializers.CharField(max_length=1)
+    gender = serializers.ChoiceField(
+        choices=Gender.choices, required=False)
 
     class Meta:
         model = Cat
         fields = "__all__"
 
     def create(self, validated_data):
-        owner_data = validated_data.pop('owner')
-        owner, _ = Human.objects.get_or_create(**owner_data)
+        print("it entered create cat")
+        try:
+            owner_data = validated_data.pop('owner')
+            owner, _ = Human.objects.get_or_create(**owner_data)
 
-        breed_data = validated_data.pop('breed')
-        breed, _ = Breed.objects.get_or_create(**breed_data)
+            breed_data = validated_data.pop('breed')
+            breed, _ = Breed.objects.get_or_create(**breed_data)
 
-        cat = Cat.objects.create(owner=owner, breed=breed, **validated_data)
-        return cat
+            cat = Cat.objects.create(
+                owner=owner, breed=breed, **validated_data)
+            return cat
+        except Exception as e:
+            return {'errors': [{'message': str(e)}]}
 
     def update(self, instance: Cat, validated_data):
+        print("it entered update cat")
 
-        owner_data = validated_data.pop('owner')
-        owner, _ = Human.objects.get_or_create(**owner_data)
+        try:
+            owner_data = validated_data.pop('owner')
+            owner, _ = Human.objects.get_or_create(**owner_data)
 
-        breed_data = validated_data.pop('breed')
-        breed, _ = Breed.objects.get_or_create(**breed_data)
+            breed_data = validated_data.pop('breed')
+            breed, _ = Breed.objects.get_or_create(**breed_data)
 
-        instance.owner = owner
-        instance.breed = breed
+            instance.owner = owner
+            instance.breed = breed
 
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
 
-        instance.save()
-        return instance
+            instance.save()
+            return instance
+        except Exception as e:
+            return {'errors': [{'message': str(e)}]}

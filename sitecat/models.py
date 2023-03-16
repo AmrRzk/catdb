@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Home(models.Model):
@@ -24,15 +25,17 @@ class Home(models.Model):
         return f"{self.name}: {self.address}"
 
 
+class Gender(models.TextChoices):
+    MALE = 'M', _('Male')
+    FEMALE = 'F', _('Female')
+    NOT_DISCLOSED = 'N', _('Not Disclosed')
+
+
 class Human(models.Model):
-    GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('N', 'Not Disclosed')
-    ]
+
     name = models.CharField(max_length=200)
     gender = models.CharField(
-        max_length=2, choices=GENDER_CHOICES, default='N')
+        max_length=1, choices=Gender.choices, default=Gender.NOT_DISCLOSED)
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     home = models.ForeignKey(Home,
@@ -52,13 +55,9 @@ class Breed(models.Model):
 
 
 class Cat(models.Model):
-    GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-    ]
     name = models.CharField(max_length=200)
     gender = models.CharField(
-        max_length=2, choices=GENDER_CHOICES, default='N')
+        max_length=1, choices=Gender.choices, default=Gender.NOT_DISCLOSED)
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     breed = models.ForeignKey(
