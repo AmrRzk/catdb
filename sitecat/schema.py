@@ -123,6 +123,7 @@ class DeleteBreed(graphene.Mutation):
 
 
 class CatMutation(SerializerMutation):
+
     class Meta:
         serializer_class = CatSerializer
         model_operations = ['create', 'update']
@@ -132,18 +133,11 @@ class CatMutation(SerializerMutation):
     def get_serializer_kwargs(cls, root, info, **input):
         context = super().get_serializer_kwargs(root, info, **input)
 
-        gender = context['data']['gender']
-
-        if gender == gender.M:
-            context['data']['gender'] = Gender.MALE
-        elif gender == gender.F:
-            context['data']['gender'] = Gender.FEMALE
-        else:
-            context['data']['gender'] = Gender.NOT_DISCLOSED
-
+        context['data']['gender'] = context['data']['gender'].name
         breed_data = context['data']['breed']
-        breed, _ = Breed.objects.get_or_create(**breed_data)
-        context['data']['breed']['id'] = breed.pk
+        breed = Breed.objects.get(**breed_data)
+        if breed is not None:
+            context['data']['breed']['id'] = breed.pk
         return context
 
 
