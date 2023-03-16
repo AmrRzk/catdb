@@ -77,7 +77,7 @@ class Query(graphene.ObjectType):
         return latest_name
 
 
-class HumanMutation(SerializerMutation):
+class HumanMutation(CustomSerializerMutation, SerializerMutation):
     class Meta:
         serializer_class = HumanSerializer
 
@@ -95,7 +95,7 @@ class DeleteHuman(graphene.Mutation):
         return DeleteHuman(ok=True)
 
 
-class HomeMutation(SerializerMutation):
+class HomeMutation(CustomSerializerMutation, SerializerMutation):
     class Meta:
         serializer_class = HomeSerializer
         model_operations = ['create', 'update']
@@ -115,7 +115,7 @@ class DeleteHome(graphene.Mutation):
         return DeleteHome(ok=True)
 
 
-class BreedMutation(SerializerMutation):
+class BreedMutation(CustomSerializerMutation, SerializerMutation):
     class Meta:
         serializer_class = BreedSerializer
         model_operations = ['create', 'update']
@@ -141,7 +141,6 @@ class CatMutation(CustomSerializerMutation, SerializerMutation):
         serializer_class = CatSerializer
         model_operations = ['create', 'update']
         lookup_field = "id"
-        enum_fields = ['gender']
 
 
 class DeleteCat(graphene.Mutation):
