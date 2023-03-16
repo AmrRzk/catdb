@@ -4,9 +4,10 @@ from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, DjangoObjectField, DjangoFilterListField
 
 from django.core.cache import cache
+from pprint import pprint
 
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
-from .models import Human, Cat, Home, Breed
+from .models import Human, Cat, Home, Breed, Gender
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
 
 
@@ -125,6 +126,17 @@ class CatMutation(SerializerMutation):
         serializer_class = CatSerializer
         model_operations = ['create', 'update']
         lookup_field = "id"
+
+    @classmethod
+    def get_serializer_kwargs(cls, root, info, **input):
+        context = super().get_serializer_kwargs(root, info, **input)
+        context['data']['gender'] = Gender.MALE
+        breed_data = context['data']['breed']
+        breed, _ = Breed.objects.get_or_create(**breed_data)
+        pprint(breed.__dict__)
+        context['data']['breed'] = {}
+        context['data']['breed']['id'] = breed.__dict__['id']
+        return context
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):

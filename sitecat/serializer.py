@@ -1,5 +1,6 @@
 from .models import Cat, Human, Breed, Home, Gender
 from rest_framework import serializers
+from pprint import pprint
 
 
 class HomeSerializer(serializers.ModelSerializer):
@@ -49,7 +50,7 @@ class HumanSerializer(serializers.ModelSerializer):
 
 
 class BreedSerializer(serializers.ModelSerializer):
-    description = serializers.CharField(max_length=200, required=False)
+    description = serializers.CharField(max_length=700, required=False)
     origin = serializers.CharField(max_length=50, required=False)
 
     class Meta:
@@ -80,6 +81,7 @@ class CatSerializer(serializers.ModelSerializer):
                 owner=owner, breed=breed, **validated_data)
             return cat
         except Exception as e:
+            pprint(e)
             return {'errors': [{'message': str(e)}]}
 
     def update(self, instance: Cat, validated_data):
