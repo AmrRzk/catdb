@@ -1,5 +1,6 @@
 import graphene
-from graphene import Enum
+import enum
+
 from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, DjangoObjectField, DjangoFilterListField
@@ -128,16 +129,16 @@ class CatMutation(SerializerMutation):
         serializer_class = CatSerializer
         model_operations = ['create', 'update']
         lookup_field = "id"
+        enum_fields = ['gender']
 
     @classmethod
     def get_serializer_kwargs(cls, root, info, **input):
         context = super().get_serializer_kwargs(root, info, **input)
 
-        context['data']['gender'] = context['data']['gender'].name
-        breed_data = context['data']['breed']
-        breed = Breed.objects.get(**breed_data)
-        if breed is not None:
-            context['data']['breed']['id'] = breed.pk
+        for key, value in context['data'].items():
+            if isinstance(value, enum.Enum):
+                context['data'][key] = context['data'][key].name
+
         return context
 
 

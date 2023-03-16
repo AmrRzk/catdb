@@ -70,8 +70,6 @@ class CatSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        print("it entered create cat")
-        pprint(validated_data)
         try:
             owner_data = validated_data.pop('owner')
             owner, _ = Human.objects.get_or_create(**owner_data)
@@ -83,7 +81,6 @@ class CatSerializer(serializers.ModelSerializer):
                 owner=owner, breed=breed, **validated_data)
             return cat
         except Exception as e:
-            pprint(e)
             return {'errors': [{'message': str(e)}]}
 
     def update(self, instance: Cat, validated_data):
