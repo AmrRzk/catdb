@@ -13,6 +13,18 @@ from .models import Human, Cat, Home, Breed, Gender
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
 
 
+class CustomSerializerMutation:
+    @classmethod
+    def get_serializer_kwargs(cls, root, info, **input):
+        context = super().get_serializer_kwargs(root, info, **input)
+
+        for key, value in context['data'].items():
+            if isinstance(value, enum.Enum):
+                context['data'][key] = context['data'][key].name
+
+        return context
+
+
 class HumanType(DjangoObjectType):
 
     class Meta:
@@ -123,23 +135,13 @@ class DeleteBreed(graphene.Mutation):
         return DeleteBreed(ok=True)
 
 
-class CatMutation(SerializerMutation):
+class CatMutation(CustomSerializerMutation, SerializerMutation):
 
     class Meta:
         serializer_class = CatSerializer
         model_operations = ['create', 'update']
         lookup_field = "id"
         enum_fields = ['gender']
-
-    @classmethod
-    def get_serializer_kwargs(cls, root, info, **input):
-        context = super().get_serializer_kwargs(root, info, **input)
-
-        for key, value in context['data'].items():
-            if isinstance(value, enum.Enum):
-                context['data'][key] = context['data'][key].name
-
-        return context
 
 
 class DeleteCat(graphene.Mutation):

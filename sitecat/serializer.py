@@ -2,6 +2,9 @@ from .models import Cat, Human, Breed, Home, Gender
 from rest_framework import serializers
 from pprint import pprint
 
+from graphene_django.rest_framework.mutation import SerializerMutation
+import enum
+
 
 class HomeSerializer(serializers.ModelSerializer):
     house_type = serializers.CharField(max_length=2, required=False)
