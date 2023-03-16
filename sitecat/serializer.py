@@ -50,6 +50,7 @@ class HumanSerializer(serializers.ModelSerializer):
 
 
 class BreedSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=70, required=False)
     description = serializers.CharField(max_length=700, required=False)
     origin = serializers.CharField(max_length=50, required=False)
 
@@ -70,6 +71,7 @@ class CatSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         print("it entered create cat")
+        pprint(validated_data)
         try:
             owner_data = validated_data.pop('owner')
             owner, _ = Human.objects.get_or_create(**owner_data)

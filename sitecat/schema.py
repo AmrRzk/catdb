@@ -1,4 +1,5 @@
 import graphene
+from graphene import Enum
 from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
 from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, DjangoObjectField, DjangoFilterListField
@@ -130,18 +131,20 @@ class CatMutation(SerializerMutation):
     @classmethod
     def get_serializer_kwargs(cls, root, info, **input):
         context = super().get_serializer_kwargs(root, info, **input)
-        context['data']['gender'] = Gender.MALE
+
+        gender = context['data']['gender']
+
+        if gender == gender.M:
+            context['data']['gender'] = Gender.MALE
+        elif gender == gender.F:
+            context['data']['gender'] = Gender.FEMALE
+        else:
+            context['data']['gender'] = Gender.NOT_DISCLOSED
+
         breed_data = context['data']['breed']
         breed, _ = Breed.objects.get_or_create(**breed_data)
-        pprint(breed.__dict__)
-        context['data']['breed'] = {}
-        context['data']['breed']['id'] = breed.__dict__['id']
+        context['data']['breed']['id'] = breed.pk
         return context
-
-    @classmethod
-    def mutate_and_get_payload(cls, root, info, **input):
-        print(super().mutate_and_get_payload(root, info, **input))
-        return super().mutate_and_get_payload(root, info, **input)
 
 
 class DeleteCat(graphene.Mutation):
