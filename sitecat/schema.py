@@ -13,10 +13,12 @@ from .models import Human, Cat, Home, Breed, Gender
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
 
 
-class CustomSerializerMutation:
+class EnumSerializerMutationMixin:
     @classmethod
     def get_serializer_kwargs(cls, root, info, **input):
+        print("Error comes before calling context")
         context = super().get_serializer_kwargs(root, info, **input)
+        print("Error comes after calling context")
 
         for key, value in context['data'].items():
             if isinstance(value, enum.Enum):
@@ -77,7 +79,7 @@ class Query(graphene.ObjectType):
         return latest_name
 
 
-class HumanMutation(CustomSerializerMutation, SerializerMutation):
+class HumanMutation(EnumSerializerMutationMixin, SerializerMutation):
     class Meta:
         serializer_class = HumanSerializer
 
@@ -95,7 +97,7 @@ class DeleteHuman(graphene.Mutation):
         return DeleteHuman(ok=True)
 
 
-class HomeMutation(CustomSerializerMutation, SerializerMutation):
+class HomeMutation(EnumSerializerMutationMixin, SerializerMutation):
     class Meta:
         serializer_class = HomeSerializer
         model_operations = ['create', 'update']
@@ -115,7 +117,7 @@ class DeleteHome(graphene.Mutation):
         return DeleteHome(ok=True)
 
 
-class BreedMutation(CustomSerializerMutation, SerializerMutation):
+class BreedMutation(EnumSerializerMutationMixin, SerializerMutation):
     class Meta:
         serializer_class = BreedSerializer
         model_operations = ['create', 'update']
@@ -135,7 +137,7 @@ class DeleteBreed(graphene.Mutation):
         return DeleteBreed(ok=True)
 
 
-class CatMutation(CustomSerializerMutation, SerializerMutation):
+class CatMutation(EnumSerializerMutationMixin, SerializerMutation):
 
     class Meta:
         serializer_class = CatSerializer
