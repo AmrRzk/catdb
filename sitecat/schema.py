@@ -11,14 +11,15 @@ from pprint import pprint
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed, Gender
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
+from .dataloaders import HomeLoader
+
+import tracemalloc
 
 
 class EnumSerializerMutationMixin:
     @classmethod
     def get_serializer_kwargs(cls, root, info, **input):
-        print("Error comes before calling context")
         context = super().get_serializer_kwargs(root, info, **input)
-        print("Error comes after calling context")
 
         for key, value in context['data'].items():
             if isinstance(value, enum.Enum):
@@ -27,24 +28,30 @@ class EnumSerializerMutationMixin:
         return context
 
 
+class HomeType(DjangoObjectType):
+    class Meta:
+        model = Home
+        filterset_class = HomeFilter
+
+
 class HumanType(DjangoObjectType):
+    home = graphene.Field(lambda: HomeType)
 
     class Meta:
         model = Human
         description = "Single User Type"
         filterset_class = HumanFilter
 
+    async def resolve_home(root, info):
+        await print("Resolving home in humans")
+        loader = HomeLoader()
+        return loader.load(root.home_id)
+
 
 class CatType(DjangoObjectType):
     class Meta:
         model = Cat
         filterset_class = CatFilter
-
-
-class HomeType(DjangoObjectType):
-    class Meta:
-        model = Home
-        filterset_class = HomeFilter
 
 
 class BreedType(DjangoObjectType):
@@ -55,7 +62,12 @@ class BreedType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
-    all_humans = DjangoFilterListField(HumanType)
+    all_humans = graphene.List(HumanType)
+
+    def resolve_all_humans(root, info):
+        tracemalloc.start()
+        print("Resolving all humans")
+        return Human.objects.all()
     all_cats = DjangoFilterListField(CatType)
     all_homes = DjangoFilterListField(HomeType)
     all_breeds = DjangoFilterListField(BreedType)
