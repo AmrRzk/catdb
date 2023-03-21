@@ -43,9 +43,8 @@ class HumanType(DjangoObjectType):
         filterset_class = HumanFilter
 
     async def resolve_home(root, info):
-        await print("Resolving home in humans")
         loader = HomeLoader()
-        return loader.load(root.home_id)
+        return await loader.load(root.home_id)
 
 
 class CatType(DjangoObjectType):
@@ -62,12 +61,7 @@ class BreedType(DjangoObjectType):
 
 class Query(graphene.ObjectType):
 
-    all_humans = graphene.List(HumanType)
-
-    def resolve_all_humans(root, info):
-        tracemalloc.start()
-        print("Resolving all humans")
-        return Human.objects.all()
+    all_humans = DjangoFilterListField(HumanType)
     all_cats = DjangoFilterListField(CatType)
     all_homes = DjangoFilterListField(HomeType)
     all_breeds = DjangoFilterListField(BreedType)
