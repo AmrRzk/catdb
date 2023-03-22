@@ -7,6 +7,7 @@ from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, 
 
 from django.core.cache import cache
 from pprint import pprint
+from django.apps import apps
 
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed, Gender
@@ -42,9 +43,11 @@ class HumanType(DjangoObjectType):
         description = "Single User Type"
         filterset_class = HumanFilter
 
-    async def resolve_home(root, info):
+    def resolve_home(root, info):
         loader = HomeLoader()
-        return await loader.load(root.home_id)
+        home = loader.load(root.home_id)
+        print("Successfully retrieved loader")
+        return home
 
 
 class CatType(DjangoObjectType):

@@ -1,4 +1,4 @@
-from .models import Cat, Human, Breed, Home, Gender
+from .models import Cat, Human, Breed, Home, Gender, HouseType
 from rest_framework import serializers
 from pprint import pprint
 
@@ -7,7 +7,8 @@ import enum
 
 
 class HomeSerializer(serializers.ModelSerializer):
-    house_type = serializers.CharField(max_length=2, required=False)
+    house_type = serializers.ChoiceField(
+        choices=HouseType.choices, required=False)
     address = serializers.CharField(max_length=200, required=False)
 
     class Meta:

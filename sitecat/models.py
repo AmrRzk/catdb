@@ -2,23 +2,23 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class Home(models.Model):
-    HOUSE_TYPE_CHOICES = [
-        ('Terrace', 'Terrace'),
-        ('Semi-D', 'Semi-Detached'),
-        ('Bungalow', 'Bungalow'),
-        ('Flat', 'Flat'),
-        ('Apartment', 'Apartment'),
-        ('Condominium', 'Condominium'),
-        ('Penthouse', 'Penthouse')
-    ]
+class HouseType(models.TextChoices):
+    TERRACE = 'TERRACE', _('Terrace')
+    SEMID = 'SEMID', _('Semi Detached')
+    BUNGALOW = 'BUNGALOW', _('Bungalow')
+    FLAT = 'FLAT', _('Flat')
+    APARTMENT = 'APARTMENT', _('Apartment')
+    CONDOMINIUM = 'CONDOMINIUM', _('Condominium')
+    PENTHOUSE = 'PENTHOUSE', _('Penthouse')
 
+
+class Home(models.Model):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     house_type = models.CharField(
         max_length=20,
-        choices=HOUSE_TYPE_CHOICES,
-        default='Apartment'
+        choices=HouseType.choices,
+        default=HouseType.APARTMENT
     )
 
     def __str__(self) -> str:
