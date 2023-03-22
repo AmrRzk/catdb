@@ -7,7 +7,7 @@ from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, 
 
 from django.core.cache import cache
 from pprint import pprint
-from django.apps import apps
+import asyncio
 
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed, Gender
@@ -44,10 +44,15 @@ class HumanType(DjangoObjectType):
         filterset_class = HumanFilter
 
     def resolve_home(root, info):
-        loader = HomeLoader()
-        home = loader.load(root.home_id)
-        print("Successfully retrieved loader")
-        return home
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        try:
+            loader = HomeLoader()
+            home = loop.run_until_complete(loader.load(root.home_id))
+            return home
+        finally:
+            loop.close()
 
 
 class CatType(DjangoObjectType):
