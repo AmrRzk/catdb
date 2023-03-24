@@ -10,23 +10,16 @@ from pprint import pprint
 import asyncio
 
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
-from .models import Human, Cat, Home, Breed, Gender
+from .models import Human, Cat, Home, Breed
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
 from .dataloaders import HomeLoader
 
+import logging
 import tracemalloc
 
+loader = HomeLoader()
 
-class EnumSerializerMutationMixin:
-    @classmethod
-    def get_serializer_kwargs(cls, root, info, **input):
-        context = super().get_serializer_kwargs(root, info, **input)
-
-        for key, value in context['data'].items():
-            if isinstance(value, enum.Enum):
-                context['data'][key] = context['data'][key].name
-
-        return context
+logger = logging.getLogger()
 
 
 class HomeType(DjangoObjectType):
@@ -44,15 +37,8 @@ class HumanType(DjangoObjectType):
         filterset_class = HumanFilter
 
     def resolve_home(root, info):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-        try:
-            loader = HomeLoader()
-            home = loop.run_until_complete(loader.load(root.home_id))
-            return home
-        finally:
-            loop.close()
+        logger.warning("It got into resolve home")
+        return loader.load(root.home_id)
 
 
 class CatType(DjangoObjectType):
@@ -93,7 +79,7 @@ class Query(graphene.ObjectType):
         return latest_name
 
 
-class HumanMutation(EnumSerializerMutationMixin, SerializerMutation):
+class HumanMutation(SerializerMutation):
     class Meta:
         serializer_class = HumanSerializer
 
@@ -111,7 +97,7 @@ class DeleteHuman(graphene.Mutation):
         return DeleteHuman(ok=True)
 
 
-class HomeMutation(EnumSerializerMutationMixin, SerializerMutation):
+class HomeMutation(SerializerMutation):
     class Meta:
         serializer_class = HomeSerializer
         model_operations = ['create', 'update']
@@ -131,7 +117,7 @@ class DeleteHome(graphene.Mutation):
         return DeleteHome(ok=True)
 
 
-class BreedMutation(EnumSerializerMutationMixin, SerializerMutation):
+class BreedMutation(SerializerMutation):
     class Meta:
         serializer_class = BreedSerializer
         model_operations = ['create', 'update']
@@ -151,7 +137,7 @@ class DeleteBreed(graphene.Mutation):
         return DeleteBreed(ok=True)
 
 
-class CatMutation(EnumSerializerMutationMixin, SerializerMutation):
+class CatMutation(SerializerMutation):
 
     class Meta:
         serializer_class = CatSerializer

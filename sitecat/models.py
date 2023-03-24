@@ -2,40 +2,39 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class HouseType(models.TextChoices):
-    TERRACE = 'TERRACE', _('Terrace')
-    SEMID = 'SEMID', _('Semi Detached')
-    BUNGALOW = 'BUNGALOW', _('Bungalow')
-    FLAT = 'FLAT', _('Flat')
-    APARTMENT = 'APARTMENT', _('Apartment')
-    CONDOMINIUM = 'CONDOMINIUM', _('Condominium')
-    PENTHOUSE = 'PENTHOUSE', _('Penthouse')
-
-
 class Home(models.Model):
+    HOUSE_TYPE_CHOICES = [
+        ('Terrace', 'Terrace'),
+        ('Semi-D', 'Semi-Detached'),
+        ('Bungalow', 'Bungalow'),
+        ('Flat', 'Flat'),
+        ('Apartment', 'Apartment'),
+        ('Condominium', 'Condominium'),
+        ('Penthouse', 'Penthouse')
+    ]
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     house_type = models.CharField(
         max_length=20,
-        choices=HouseType.choices,
-        default=HouseType.APARTMENT
+        choices=HOUSE_TYPE_CHOICES,
+        default="Apartment"
     )
 
     def __str__(self) -> str:
         return f"{self.name}: {self.address}"
 
 
-class Gender(models.TextChoices):
-    MALE = 'M', _('Male')
-    FEMALE = 'F', _('Female')
-    NOT_DISCLOSED = 'N', _('Not Disclosed')
-
-
 class Human(models.Model):
+
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('N', 'Not Disclosed')
+    ]
 
     name = models.CharField(max_length=200)
     gender = models.CharField(
-        max_length=1, choices=Gender.choices, default=Gender.NOT_DISCLOSED)
+        max_length=1, choices=GENDER_CHOICES, default="N")
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     home = models.ForeignKey(Home,
@@ -55,9 +54,14 @@ class Breed(models.Model):
 
 
 class Cat(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('N', 'Not Disclosed')
+    ]
     name = models.CharField(max_length=200)
     gender = models.CharField(
-        max_length=1, choices=Gender.choices, default=Gender.NOT_DISCLOSED)
+        max_length=1, choices=GENDER_CHOICES, default="N")
     birth_date = models.DateField('date of birth')
     description = models.CharField(max_length=300)
     breed = models.ForeignKey(
