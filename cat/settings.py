@@ -151,7 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GRAPHENE = {
     'SCHEMA': "sitecat.schema.schema",
-    'MIDDLEWARE': ['sitecat.middleware.PrintMiddleware'],
+    'MIDDLEWARE': ['sitecat.middleware.DataLoaderMiddleware'],
 }
 
 REST_FRAMEWORK = {
