@@ -15,7 +15,6 @@ class HomeLoader(DataLoader):
         return {home.id: home for home in homes}
 
     def batch_load_fn(self, keys):
-        logger.warning("Got into batch loader")
         homes = Home.objects.filter(id__in=keys)
         home_map = self.get_home_map(homes)
         return Promise.resolve([home_map.get(home_id) for home_id in keys])

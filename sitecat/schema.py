@@ -3,23 +3,17 @@ import enum
 
 from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
-from graphene_django_extras import DjangoListObjectType, DjangoListObjectField, DjangoObjectField, DjangoFilterListField
+from graphene_django_extras import DjangoObjectField, DjangoFilterListField
 
 from django.core.cache import cache
-from pprint import pprint
-import asyncio
 
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
 from .dataloaders import HomeLoader
 
-import logging
-import tracemalloc
 
 loader = HomeLoader()
-
-logger = logging.getLogger()
 
 
 class HomeType(DjangoObjectType):
@@ -37,7 +31,11 @@ class HumanType(DjangoObjectType):
         filterset_class = HumanFilter
 
     def resolve_home(root, info):
-        logger.warning("It got into resolve home")
+        try:
+            loader = info.context.loader
+            print("In here normally", loader)
+        except:
+            loader = HomeLoader()
         return loader.load(root.home_id)
 
 

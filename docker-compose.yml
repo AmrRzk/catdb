@@ -29,6 +29,8 @@ services:
       - discovery.type=single-node
     ports:
       - "9200:9200"
+    logging:
+      driver: none
 
   redis:
     image: redis:alpine
@@ -41,6 +43,7 @@ services:
     depends_on:
       - django
       - redis
+
   celery-beat:
     build: .
     command: celery -A cat beat -l info
