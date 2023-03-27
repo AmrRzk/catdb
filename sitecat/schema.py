@@ -1,5 +1,4 @@
 import graphene
-import enum
 
 from graphene_django import DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
@@ -10,7 +9,7 @@ from django.core.cache import cache
 from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
-from .dataloaders import HomeLoader
+from .dataloaders import HomeLoader, HumanLoader, BreedLoader
 
 
 loader = HomeLoader()
@@ -33,22 +32,38 @@ class HumanType(DjangoObjectType):
     def resolve_home(root, info):
         try:
             loader = info.context.loader
-            print("In here normally", loader)
         except:
             loader = HomeLoader()
         return loader.load(root.home_id)
-
-
-class CatType(DjangoObjectType):
-    class Meta:
-        model = Cat
-        filterset_class = CatFilter
 
 
 class BreedType(DjangoObjectType):
     class Meta:
         model = Breed
         filterset_class = BreedFilter
+
+
+class CatType(DjangoObjectType):
+    owner = graphene.Field(lambda: HumanType)
+    breed = graphene.Field(lambda: BreedType)
+
+    class Meta:
+        model = Cat
+        filterset_class = CatFilter
+
+    def resolve_owner(root, info):
+        try:
+            owner_loader = info.context.owner_loader
+        except:
+            owner_loader = HumanLoader()
+        return owner_loader.load(root.owner_id)
+
+    def resolve_breed(root, info):
+        try:
+            breed_loader = info.context.breed_loader
+        except:
+            breed_loader = BreedLoader()
+        return breed_loader.load(root.breed_id)
 
 
 class Query(graphene.ObjectType):
@@ -111,7 +126,7 @@ class DeleteHome(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, **kwargs):
         home = Home.objects.get(pk=kwargs.get('id'))
-        Home.delete()
+        home.delete()
         return DeleteHome(ok=True)
 
 

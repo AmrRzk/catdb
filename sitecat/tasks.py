@@ -20,6 +20,6 @@ def update_breed(self):
         breeds.append(Breed(**breed))
 
     Breed.objects.bulk_create(
-        breeds, ignore_conflicts=True, unique_fields=['name'])
+        breeds, ignore_conflicts=True)
 
     return "Data successfully updated"

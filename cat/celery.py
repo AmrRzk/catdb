@@ -17,7 +17,7 @@ app.config_from_object(settings, namespace='CELERY')
 app.conf.beat_schedule = {
     'update-breed-everyday':  {
         'task': 'sitecat.tasks.update_breed',
-        'schedule': crontab(hour=14, minute=48),
+        'schedule': crontab(hour=17, minute=2),
     }
 }
 

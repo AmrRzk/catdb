@@ -1,20 +1,21 @@
 from promise.dataloader import DataLoader
 from promise import Promise
-from .models import Home
-from asgiref.sync import sync_to_async
-import asyncio
-
-import logging
-
-logger = logging.getLogger()
+from .models import Home, Breed, Human
 
 
 class HomeLoader(DataLoader):
-
-    def get_home_map(self, homes):
-        return {home.id: home for home in homes}
-
     def batch_load_fn(self, keys):
-        homes = Home.objects.filter(id__in=keys)
-        home_map = self.get_home_map(homes)
-        return Promise.resolve([home_map.get(home_id) for home_id in keys])
+        homes = Home.objects.in_bulk(keys)
+        return Promise.resolve([homes.get(home_id) for home_id in keys])
+
+
+class HumanLoader(DataLoader):
+    def batch_load_fn(self, keys):
+        humans = Human.objects.in_bulk(keys)
+        return Promise.resolve([humans.get(human_id) for human_id in keys])
+
+
+class BreedLoader(DataLoader):
+    def batch_load_fn(self, keys):
+        breeds = Breed.objects.in_bulk(keys)
+        return Promise.resolve([breeds.get(breed_id) for breed_id in keys])

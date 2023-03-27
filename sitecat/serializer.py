@@ -27,20 +27,14 @@ class HumanSerializer(serializers.ModelSerializer):
         model = Human
         fields = ["id", "name", "gender", "birth_date", "description", "home"]
 
-    # if no ID is provided, it will go to this create function
     def create(self, validated_data):
         home_data = validated_data.pop('home')
-
-        # Creates new home if home is created, otherwise get from existing data
         home, created = Home.objects.get_or_create(**home_data)
         human = Human.objects.create(home=home, **validated_data)
         return human
 
-    # if ID is provided, it will lookup and get the related instance
     def update(self, instance, validated_data):
         home_data = validated_data.pop('home')
-
-        # Creates new home if home is created, otherwise get from existing data
         home, created = Home.objects.get_or_create(**home_data)
 
         instance.home = home
@@ -81,12 +75,12 @@ class CatSerializer(serializers.ModelSerializer):
 
             cat = Cat.objects.create(
                 owner=owner, breed=breed, **validated_data)
+            print(cat)
             return cat
         except Exception as e:
             return {'errors': [{'message': str(e)}]}
 
     def update(self, instance: Cat, validated_data):
-        print("it entered update cat")
 
         try:
             owner_data = validated_data.pop('owner')
