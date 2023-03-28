@@ -30,7 +30,9 @@ graphql-core==2.3.2
 graphql-relay==2.0.1
 idna==3.4
 kombu==5.2.4
+numpy==1.24.2
 packaging==23.0
+pandas==1.5.3
 promise==2.3
 prompt-toolkit==3.0.38
 psycopg2==2.9.5

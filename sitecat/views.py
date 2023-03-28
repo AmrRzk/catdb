@@ -1,6 +1,6 @@
 from django import forms
 from django.db import models
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
@@ -8,6 +8,10 @@ from django.contrib import messages
 
 from .forms import HumanForm, CatForm, BreedForm, HomeForm
 from .models import Human as HumanModel, Cat as CatModel, Breed as BreedModel, Home as HomeModel
+from pprint import pprint
+
+import pandas as pd
+import io
 
 
 class IndexView(TemplateView):
@@ -43,6 +47,58 @@ def delete(request: HttpRequest, model: models.Model, model_type: str, url: str,
             request, 'An error has occured while trying to delete the object')
         context["error_msg"] = "Deletion of record is unsuccessful"
         return render(request, 'detailview.html', context)
+
+
+def get_obj_data(model_name):
+    data = []
+    if model_name == "Human":
+        data = HumanModel.objects.all()
+    elif model_name == "Home":
+        data = HomeModel.objects.all()
+    elif model_name == "Breed":
+        data = BreedModel.objects.all()
+    elif model_name == "Cat":
+        data = CatModel.objects.all()
+    return data
+
+
+def get_filter_data(data, start_date=None, end_date=None):
+
+    if start_date and end_date:
+        filter_data = data.filter(
+            created__gte=start_date, created__lte=end_date)
+    elif start_date:
+        filter_data = data.filter(created__gte=start_date)
+    elif end_date:
+        filter_data = data.filter(created__lte=end_date)
+    else:
+        filter_data = data
+
+    return filter_data
+
+
+def export_csv(request):
+    if request.method == "GET":
+        return render(request, 'export_csv.html')
+
+    elif request.method == "POST":
+        data = get_obj_data(request.POST['selected-model'])
+        start_date = request.POST.get('start')
+        end_date = request.POST.get('end')
+
+        filter_data = get_filter_data(data, start_date, end_date)
+
+        df_data = pd.DataFrame([data.__dict__ for data in filter_data])
+        df_data.drop('_state', axis=1, inplace=True)
+        df_data.set_index('id', inplace=True)
+
+        csv_buffer = io.StringIO()
+        df_data.to_csv(csv_buffer)
+
+        response = HttpResponse(csv_buffer.getvalue(), content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=model.csv'
+
+        return response
 
 
 class Human:

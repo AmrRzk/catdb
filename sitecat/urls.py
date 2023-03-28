@@ -6,6 +6,9 @@ app_name = "sitecat"
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
 
+    path('export', views.export_csv, name='export-csv'),
+
+
     path('human', views.Human.List.as_view(), name='human-list'),
     path('human/<int:pk>/', views.Human.Detail.as_view(), name='human-detail'),
     path('human/create/', views.Human.Form.as_view(), name='human-create'),

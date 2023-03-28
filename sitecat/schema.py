@@ -30,8 +30,6 @@ class HumanType(DjangoObjectType):
     def resolve_home(root, info):
         try:
             loader = info.context.home_loader
-            print("Using dataloader: ", loader)
-            print("Getting home ID", root.home_id)
         except:
             loader = HomeLoader()
         return loader.load(root.home_id)

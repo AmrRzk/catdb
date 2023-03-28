@@ -1,0 +1,91 @@
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 48px;
+    }
+
+    table {
+        padding: 10px;
+        text-align: left;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    input,
+    select {
+        padding: 10px;
+        border: 1px solid black;
+        border-radius: 4px;
+    }
+
+    select:hover {
+        cursor: pointer;
+    }
+
+    .btn {
+        margin-left: 10px;
+        border: 0;
+        flex-wrap: wrap;
+        background-color: #dddddd;
+        padding: 10px 20px;
+        border-radius: 4px;
+        display: inline-flex;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .btn:hover {
+        background-color: #aaaaaa;
+    }
+
+    .card {
+        margin: 50px auto;
+        float: none;
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        flex: auto;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .choices {
+        padding: 20px 0;
+        margin: 0 auto;
+        width: 50%;
+    }
+</style>
+
+<body>
+    {% include 'nav.html' %}
+
+    <div class="card">
+        <h1>Export CSV Data</h1>
+        <form method="post"> {% csrf_token %}
+            <div class="choices">
+                <input type="radio" id="human" name="selected-model" value="Human">
+                <label for="human">Human</label>
+                <input type="radio" id="home" name="selected-model" value="Home">
+                <label for="home">Home</label>
+                <input type="radio" id="breed" name="selected-model" value="Breed">
+                <label for="breed">Breed</label>
+                <input type="radio" id="cat" name="selected-model" value="Cat">
+                <label for="cat">Cat</label>
+            </div>
+
+
+            <label for="start-date">Start Date: </label>
+            <input type="datetime" id="start-date" placeholder="yyyy-mm-dd" name="start">
+            <label for="end-date">End Date: </label>
+            <input type="datetime" id="end-date" placeholder="yyyy-mm-dd" name="end">
+            <input class="btn" type="submit" value="Export">
+        </form>
+    </div>
+</body>

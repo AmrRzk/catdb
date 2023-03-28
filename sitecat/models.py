@@ -13,6 +13,7 @@ class Home(models.Model):
         ('Penthouse', 'Penthouse')
     ]
     name = models.CharField(max_length=200)
+    created = models.DateField(auto_now_add=True)
     address = models.CharField(max_length=200)
     house_type = models.CharField(
         max_length=20,
@@ -33,6 +34,7 @@ class Human(models.Model):
     ]
 
     name = models.CharField(max_length=200)
+    created = models.DateField(auto_now_add=True)
     gender = models.CharField(
         max_length=1, choices=GENDER_CHOICES, default="N")
     birth_date = models.DateField('date of birth')
@@ -46,6 +48,7 @@ class Human(models.Model):
 
 class Breed(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    created = models.DateField(auto_now_add=True)
     origin = models.CharField(max_length=100)
     description = models.CharField(max_length=700)
 
@@ -60,6 +63,7 @@ class Cat(models.Model):
         ('N', 'Not Disclosed')
     ]
     name = models.CharField(max_length=200)
+    created = models.DateField(auto_now_add=True)
     gender = models.CharField(
         max_length=1, choices=GENDER_CHOICES, default="N")
     birth_date = models.DateField('date of birth')
