@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sitecat.middleware.DataloaderMiddleware'
 ]
 
 CACHES = {
@@ -151,7 +152,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GRAPHENE = {
     'SCHEMA': "sitecat.schema.schema",
-    'MIDDLEWARE': ['sitecat.middleware.DataLoaderMiddleware'],
 }
 
 REST_FRAMEWORK = {

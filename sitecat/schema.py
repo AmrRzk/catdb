@@ -1,3 +1,4 @@
+from pprint import pprint
 import graphene
 
 from graphene_django import DjangoObjectType
@@ -10,9 +11,6 @@ from .filters import HumanFilter, CatFilter, HomeFilter, BreedFilter
 from .models import Human, Cat, Home, Breed
 from .serializer import HumanSerializer, CatSerializer, HomeSerializer, BreedSerializer
 from .dataloaders import HomeLoader, HumanLoader, BreedLoader
-
-
-loader = HomeLoader()
 
 
 class HomeType(DjangoObjectType):
@@ -31,7 +29,9 @@ class HumanType(DjangoObjectType):
 
     def resolve_home(root, info):
         try:
-            loader = info.context.loader
+            loader = info.context.home_loader
+            print("Using dataloader: ", loader)
+            print("Getting home ID", root.home_id)
         except:
             loader = HomeLoader()
         return loader.load(root.home_id)
